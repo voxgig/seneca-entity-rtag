@@ -38,7 +38,7 @@
     "prettier": "^1.16.4",
     "seneca": "plugin",
     "seneca-doc": "^0.1.2",
-    "seneca-entity": "^2.5.1",
+    "seneca-entity": "^3.0.1",
     "seneca-plugin-validator": "^0.0.1"
   }
 }
