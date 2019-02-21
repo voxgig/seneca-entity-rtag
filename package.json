@@ -1,0 +1,44 @@
+{
+  "name": "@seneca/entity-rtag",
+  "version": "0.0.1",
+  "description": "Adds a random tag to entities on each save, allowing for various caching strategies.",
+  "main": "entity-rtag.js",
+  "scripts": {
+    "test": "lab -P test -t 80",
+    "seneca-doc": "seneca-doc",
+    "prettier": "prettier --write *.js lib/*.js bin/*.js test/*.js",
+    "coveralls": "lab -s -P test -r lcov | coveralls",
+    "clean-npm": "rm -rf node_modules package-lock.json",
+    "clean-yarn": "rm -rf node_modules yarn.lock",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run prettier && npm test && npm run repo-tag && npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voxgig/seneca-entity-rtag.git"
+  },
+  "keywords": [
+    "seneca",
+    "entity",
+    "rtag"
+  ],
+  "author": "Richard Rodger richardrodger.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voxgig/seneca-entity-rtag/issues"
+  },
+  "homepage": "https://github.com/voxgig/seneca-entity-rtag#readme",
+  "dependencies": {
+    "seneca-promisify": "^0.7.1"
+  },
+  "devDependencies": {
+    "code": "^5.2.4",
+    "coveralls": "^3.0.2",
+    "lab": "^18.0.1",
+    "prettier": "^1.16.4",
+    "seneca": "plugin",
+    "seneca-doc": "^0.1.2",
+    "seneca-entity": "^2.5.1",
+    "seneca-plugin-validator": "^0.0.1"
+  }
+}
