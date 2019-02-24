@@ -1,6 +1,6 @@
 {
   "name": "@seneca/entity-rtag",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Adds a random tag to entities on each save, allowing for various caching strategies.",
   "main": "entity-rtag.js",
   "scripts": {

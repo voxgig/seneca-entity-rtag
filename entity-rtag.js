@@ -21,9 +21,20 @@ function entity_rtag(options) {
   const HIT = 1
   const MISS = 2
 
+  const stats = {
+    hit: 0,
+    miss: 0,
+    space: {}
+  }
+
   seneca
     .message('role:entity,cmd:save', cmd_save_rtag)
     .message('role:cache,resolve:rtag', resolve_rtag)
+    .message('role:cache,stats:rtag', stats_rtag)
+
+  async function stats_rtag(msg) {
+    return stats
+  }
 
   Object.assign(cmd_save_rtag, {
     desc: 'Override role:entity,cmd:save to rtag field.'
@@ -75,10 +86,16 @@ function entity_rtag(options) {
         entryout.rtag$ = HIT
       }
 
+      stats.hit++
+      ;(stats.space[space] = stats.space[space] || { hit: 0, miss: 0 }).hit++
+
       return entryout
     } else {
       var origdata = await resolver.call(seneca)
       var cachedata = origdata
+
+      stats.miss++
+      ;(stats.space[space] = stats.space[space] || { hit: 0, miss: 0 }).miss++
 
       if (cachedata && false !== cachedata.rtag_cache$) {
         if (cachedata.entity$) {
@@ -94,8 +111,19 @@ function entity_rtag(options) {
           when: Date.now()
         })
 
-        cache_entry.data = cachedata
-        await cache_entry.save$()
+        try {
+          cache_entry.data = cachedata
+
+          // TODO: find a better way to do this
+
+          var cache_entry_exists = await seneca.entity('sys/cache').load$(id)
+          if (!cache_entry_exists) {
+            await cache_entry.save$()
+          }
+        } catch (e) {
+          // NOTE: can be safely ignored
+          console.log('CACHE SAVE', e)
+        }
       }
 
       if (options.annotate) {

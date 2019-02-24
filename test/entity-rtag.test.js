@@ -148,6 +148,13 @@ lab.test('resolve', async () => {
   expect(out6.foo.a).equal(1)
   expect(out6.bar.b).equal(2)
   expect(out6.rtag$).equal(MISS)
+
+  var stats = await si.post('role:cache,stats:rtag')
+  expect(stats).equal({
+    hit: 3,
+    miss: 4,
+    space: { test0: { hit: 3, miss: 4 } }
+  })
 })
 
 lab.test('resolve-entity', async () => {
@@ -221,6 +228,13 @@ lab.test('resolve-entity', async () => {
 
   expect(out4.b).equal(2)
   expect(out4.rtag$).equal(HIT)
+
+  var stats = await si.post('role:cache,stats:rtag')
+  expect(stats).equal({
+    hit: 3,
+    miss: 2,
+    space: { test0: { hit: 3, miss: 2 } }
+  })
 })
 
 function seneca_instance(config, plugin_options) {
